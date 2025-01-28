@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import starIcon from "../assets/icons/star_icon.png";
 import starDullIcon from "../assets/icons/star_dull_icon.png";
 import RelatedProducts from "../components/RelatedProducts";
@@ -17,13 +17,15 @@ const fetchData = async ({ queryKey }) => {
 };
 const Product = () => {
   const { id } = useParams();
-  const {cartItems, setCartItems} = useContext(productContext);
+  const navigate = useNavigate();
+  const {cartItems, setCartItems,users} = useContext(productContext);
   const { data, isLoading } = useQuery({
     queryKey: ["product", id],
     queryFn: fetchData,
   });
 
   const handleAddToCart = () => {
+   if(users.length !== 0){
     toast.success("Product added to cart", {
       position: "top-right",
       autoClose: 5000,
@@ -41,6 +43,9 @@ const Product = () => {
 
         setCartItems([...cartItems, {...data, quantity: 1}]);
     }
+   }else{
+      navigate("/login");
+   }
   };
 
   if (isLoading) return <div className="text-3xl">Loading...</div>;
