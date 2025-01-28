@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createUser } from "../_auth/firebase";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -25,6 +26,7 @@ const SignUp = () => {
       });
       const user = await createUser(formData.email, formData.password);
       console.log(user);
+      navigate("/login");
     }
   };
   return (
